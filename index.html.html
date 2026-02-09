@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#ff4d6d" />
+  <title>Für dich 💘</title>
+  <style>
+    :root{
+      --bg1:#ff4d6d;
+      --bg2:#7c3aed;
+      --text:rgba(255,255,255,.95);
+      --muted:rgba(255,255,255,.82);
+      --shadow:0 24px 70px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background: linear-gradient(135deg,var(--bg1),var(--bg2));
+      overflow:hidden;
+    }
+
+    .card{
+      width:min(560px, 100%);
+      border-radius:26px;
+      background: rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(14px);
+      padding:18px;
+      text-align:center;
+    }
+
+    h1{font-size:28px;margin:0 0 10px}
+    p{font-size:16px;color:var(--muted);line-height:1.6}
+
+    .text{
+      white-space:pre-wrap;
+      min-height:120px;
+      margin:20px 0;
+      font-size:16px;
+    }
+
+    .big-love{
+      font-size:42px;
+      font-weight:900;
+      margin-top:14px;
+      line-height:1.2;
+    }
+
+    button{
+      border:0;
+      border-radius:16px;
+      padding:14px;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+      margin-top:12px;
+      width:100%;
+    }
+
+    .yes{
+      background: linear-gradient(135deg,#ff4d6d,#7c3aed);
+      color:white;
+    }
+
+    .confetti{ position:fixed; inset:0; pointer-events:none; }
+    .piece{
+      position:absolute;
+      width:10px;height:14px;
+      background:white;
+      opacity:.9;
+      animation: fall linear forwards;
+      border-radius:4px;
+    }
+    @keyframes fall{
+      to{ transform: translateY(120vh) rotate(540deg); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ✅ Put audio inside body -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="penguin.mp3" type="audio/mpeg">
+</audio>
+
+<div class="confetti" id="confetti"></div>
+
+<div class="card">
+  <h1 id="title">Hey du… 🌹</h1>
+  <p id="subtitle">Ich muss dir etwas Wichtiges sagen.</p>
+
+  <div class="text" id="text"></div>
+
+  <button class="yes" id="btn">Weiter 😌</button>
+</div>
+
+<script>
+  const text = document.getElementById("text");
+  const btn = document.getElementById("btn");
+  const confetti = document.getElementById("confetti");
+  const music = document.getElementById("bgMusic");   // ✅ added
+  let musicStarted = false;                           // ✅ added
+
+  const steps = [
+`Ich bin so unglaublich froh, dass alles zwischen uns so gut geklappt hat.
+
+Mit dir fühlt sich alles richtig an.
+Und ich bin dankbar für jeden Moment mit dir. 💗`,
+
+`Wenn ich an die Zukunft denke, sehe ich uns.
+
+Ich freue mich darauf, mit dir zu lachen, zu wachsen
+und mein Leben mit dir zu teilen — für immer. 🫶`,
+
+`Willst du meine Valentine sein? 💘`,
+
+`Bist du sicher? 😳💗`,
+
+`Yaaaaay 😝😝😝🥳🥳🥳🥳❤️❤️❤️❤️❤️❤️`
+  ];
+
+  let i = 0;
+
+  btn.onclick = () => {
+    // ✅ start music on first tap (mobile-safe)
+    if(!musicStarted){
+      music.volume = 0.6;
+      music.play().catch(()=>{});
+      musicStarted = true;
+    }
+
+    if(i < steps.length){
+      text.textContent = steps[i];
+      i++;
+      if(i === 3) btn.textContent = "Ja 💖";
+      if(i === 4) btn.textContent = "Ja, ganz sicher ✅";
+    } else {
+      boom();
+      text.innerHTML =
+        `<div class="big-love">
+          I&nbsp;LOVE&nbsp;YOU<br/>
+          ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️
+         </div>`;
+      btn.style.display = "none";
+    }
+  };
+
+  function boom(){
+    for(let i=0;i<120;i++){
+      const p=document.createElement("div");
+      p.className="piece";
+      p.style.left=Math.random()*100+"vw";
+      p.style.top="-20px";
+      p.style.animationDuration=(3+Math.random()*3)+"s";
+      confetti.appendChild(p);
+      setTimeout(()=>p.remove(),8000);
+    }
+  }
+</script>
+
+</body>
+</html>
